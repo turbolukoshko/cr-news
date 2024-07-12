@@ -1,4 +1,5 @@
 <template>
+  <h2 class="latest-updates-title">Latest Updates</h2>
   <div class="latest-updates">
     <div class="filter-panel">
       <label for="news">News </label>
@@ -117,10 +118,15 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .latest-updates {
-  width: 500px;
+  width: 300px;
   border: 1px solid #ccc;
   padding: 16px;
   box-sizing: border-box;
+
+  &-title {
+    margin-bottom: 16px;
+    text-align: center;
+  }
 
   .filter-panel {
     margin-bottom: 16px;
