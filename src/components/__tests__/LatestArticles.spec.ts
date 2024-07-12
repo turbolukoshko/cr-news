@@ -66,11 +66,9 @@ describe('LatestUpdates.vue', () => {
     expect(wrapper.findAll('.article-box ul li').length).toBeGreaterThan(0)
 
     await wrapper.find('#news').setValue(false)
-    expect(wrapper.findAll('.article-box ul li').length).toBe(3)
+    expect(wrapper.findAll('.article-box ul li').length).toBe(1)
 
     await wrapper.find('#essays').setValue(false)
-    expect(wrapper.find('.article-box ul li').text()).toBe(
-      'When will it become possible to use t...July 12'
-    )
+    expect(wrapper.find('.article-box ul li').text()).toBe('No articles')
   })
 })
