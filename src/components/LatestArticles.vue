@@ -9,8 +9,8 @@
     <div class="article-box">
       <ul>
         <li v-for="article in filteredArticles" :key="article.url">
-          <a :href="article.url" :title="article.title">{{ article.title }}</a>
-          <span>{{ article.publishDate }}</span>
+          <a :href="article.url" :title="article.title">{{ cutTitle(article.title) }}</a>
+          <span>{{ formatDate(article.publishDate) }}</span>
         </li>
       </ul>
     </div>
@@ -70,14 +70,26 @@ export default {
     filteredArticles() {
       const { news, essays } = this.filters
 
-      return this.articles.filter((article) => {
-        const isRecent =
-          new Date(article.publishDate) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        return (
-          isRecent &&
-          ((news && article.category === 'news') || (essays && article.category === 'essay'))
-        )
-      })
+      return this.articles
+        .filter((article) => {
+          const isRecent =
+            new Date(article.publishDate) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          return (
+            isRecent &&
+            ((news && article.category === 'news') || (essays && article.category === 'essay'))
+          )
+        })
+        .sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+        .slice(0, 5)
+    }
+  },
+  methods: {
+    cutTitle(title) {
+      return title.length > 40 ? `${title.substring(0, 37)}...` : title
+    },
+    formatDate(date) {
+      const options = { month: 'long', day: 'numeric' }
+      return new Date(date).toLocaleDateString('en-US', options)
     }
   }
 }
