@@ -8,6 +8,7 @@
     </div>
     <div class="article-box">
       <ul>
+        <li v-if="filteredArticles.length === 0">No articles</li>
         <li v-for="article in filteredArticles" :key="article.url">
           <a :href="article.url" :title="article.title">{{ cutTitle(article.title) }}</a>
           <span>{{ formatDate(article.publishDate) }}</span>
@@ -94,3 +95,41 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.latest-updates {
+  width: 500px;
+  border: 1px solid #ccc;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.filter-panel {
+  margin-bottom: 16px;
+}
+
+.article-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.article-box li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.article-box a {
+  text-decoration: none;
+  color: #007bff;
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.article-box span {
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
