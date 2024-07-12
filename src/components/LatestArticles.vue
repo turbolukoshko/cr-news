@@ -18,118 +18,129 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      filters: {
-        news: true,
-        essays: true
-      },
-      articles: window.LATEST_ARTICLES || [
-        {
-          title: 'Find new ways to travel north',
-          publishDate: '2024-07-12T09:00:32.200Z',
-          category: 'news',
-          url: '/articles/4738.html'
-        },
-        {
-          title:
-            'When will it become possible to use time travel in order to fix your earlier mistakes?',
-          publishDate: '2024-07-12T12:18:10.317Z',
-          category: 'essay',
-          url: '/articles/7256.html'
-        },
-        {
-          title: '10 ways to write better text',
-          publishDate: '2024-07-12T09:00:32.200Z',
-          category: 'news',
-          url: '/articles/7247.html'
-        },
-        {
-          title: 'Announcement: we have a new website category',
-          publishDate: '2024-05-30T17:12:13.102Z',
-          category: 'news',
-          url: '/articles/1749.html'
-        },
-        {
-          title: 'Weekly news',
-          publishDate: '2023-05-29T00:23:15.276Z',
-          category: 'news',
-          url: '/articles/1538.html'
-        },
-        {
-          title: 'In-depth travel guide for Tanzania',
-          publishDate: '2023-05-31T11:12:43.003Z',
-          category: 'essay',
-          url: '/articles/2594.html'
-        }
-      ]
-    }
-  },
-  computed: {
-    filteredArticles() {
-      const { news, essays } = this.filters
+<script setup lang="ts">
+import { defineProps, computed } from 'vue'
 
-      return this.articles
-        .filter((article) => {
-          const isRecent =
-            new Date(article.publishDate) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          return (
-            isRecent &&
-            ((news && article.category === 'news') || (essays && article.category === 'essay'))
-          )
-        })
-        .sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
-        .slice(0, 5)
-    }
-  },
-  methods: {
-    cutTitle(title) {
-      return title.length > 40 ? `${title.substring(0, 37)}...` : title
-    },
-    formatDate(date) {
-      const options = { month: 'long', day: 'numeric' }
-      return new Date(date).toLocaleDateString('en-US', options)
-    }
+type Article = {
+  title: string
+  publishDate: string
+  category: 'news' | 'essay'
+  url: string
+}
+
+const props = defineProps({
+  articles: {
+    type: Array as () => Article[],
+    required: false,
+    default: () => [
+      {
+        title: 'Find new ways to travel north',
+        publishDate: '2024-07-12T09:00:32.200Z',
+        category: 'news',
+        url: '/articles/4738.html'
+      },
+      {
+        title:
+          'When will it become possible to use time travel in order to fix your earlier mistakes?',
+        publishDate: '2024-07-12T12:18:10.317Z',
+        category: 'essay',
+        url: '/articles/7256.html'
+      },
+      {
+        title: '10 ways to write better text',
+        publishDate: '2024-07-12T09:00:32.200Z',
+        category: 'news',
+        url: '/articles/7247.html'
+      },
+      {
+        title: 'Announcement: we have a new website category',
+        publishDate: '2024-05-30T17:12:13.102Z',
+        category: 'news',
+        url: '/articles/1749.html'
+      },
+      {
+        title: 'Weekly news',
+        publishDate: '2023-05-29T00:23:15.276Z',
+        category: 'news',
+        url: '/articles/1538.html'
+      },
+      {
+        title: 'In-depth travel guide for Tanzania',
+        publishDate: '2023-05-31T11:12:43.003Z',
+        category: 'essay',
+        url: '/articles/2594.html'
+      }
+    ]
   }
+})
+
+const filters = {
+  news: true,
+  essays: true
+}
+
+const filteredArticles = computed(() => {
+  const { news, essays } = filters
+
+  return props.articles
+    .filter((article) => {
+      const isRecent =
+        new Date(article.publishDate) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      return (
+        isRecent &&
+        ((news && article.category === 'news') || (essays && article.category === 'essay'))
+      )
+    })
+    .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
+    .slice(0, 5)
+})
+
+function cutTitle(title: string): string {
+  return title.length > 40 ? `${title.substring(0, 37)}...` : title
+}
+
+function formatDate(date: string): string {
+  const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' }
+  return new Date(date).toLocaleDateString('en-US', options)
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .latest-updates {
   width: 500px;
   border: 1px solid #ccc;
   padding: 16px;
   box-sizing: border-box;
-}
 
-.filter-panel {
-  margin-bottom: 16px;
-}
+  .filter-panel {
+    margin-bottom: 16px;
+  }
 
-.article-box ul {
-  list-style: none;
-  padding: 0;
-}
+  .article-box {
+    ul {
+      list-style: none;
+      padding: 0;
 
-.article-box li {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
+      li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
 
-.article-box a {
-  text-decoration: none;
-  color: #007bff;
-  max-width: 70%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+        a {
+          text-decoration: none;
+          color: #007bff;
+          max-width: 70%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-.article-box span {
-  color: #666;
-  font-size: 0.9em;
+        span {
+          color: #666;
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
 }
 </style>
