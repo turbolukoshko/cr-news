@@ -2,6 +2,12 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+Interactive component that displays a list of recently published pages on a website (news and essays).
+
+![screenshot](./src/assets/screenshot.png)
+
+> You should use Node 18.x and latest
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

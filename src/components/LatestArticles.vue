@@ -118,7 +118,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .latest-updates {
-  width: 300px;
+  width: 100%;
+  max-width: 500px;
   border: 1px solid #ccc;
   padding: 16px;
   box-sizing: border-box;
